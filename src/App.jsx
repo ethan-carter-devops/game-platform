@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import styles from "./App.module.css";
-import { supabase } from "./supabase";
 import api, { removeToken, getStoredToken, storeToken } from "./api";
 
 function Greeting({ userName }) {
@@ -69,30 +67,12 @@ const App = () => {
   };
 
   const onGoogleSuccess = async (credentialResponse) => {
-    let sessionToken;
-    try {
-      const {
-        data: { message, user, session },
-      } = await sendAPIsignin(credentialResponse);
-      console.log("Login Success:", user);
-      setMessage(message);
-      sessionToken = session;
-    } catch (error) {
-      const {
-        data: { session, user },
-        error: errorSupabase,
-      } = await supabase.auth.signInWithIdToken({
-        provider: "google",
-        token: credentialResponse.credential,
-      });
-      sessionToken = session;
-      if (errorSupabase) {
-        setError("Please remove browser ad blockers and try again.");
-        console.debug("Login Failed:", errorSupabase);
-        throw new Error(errorSupabase);
-      }
-      setMessage(`User logged successfully as ${user.email}`);
-    }
+    const {
+      data: { message, user, session },
+    } = await sendAPIsignin(credentialResponse);
+    console.log("Login Success:", user);
+    setMessage(message);
+    const sessionToken = session;
     const userData = jwtDecode(sessionToken.access_token);
     storeToken(sessionToken);
     setAppSession(sessionToken);
