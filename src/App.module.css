@@ -1,0 +1,144 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+  font-family: 'Arial', sans-serif;
+}
+
+.loginCard {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+  backdrop-filter: blur(10px);
+}
+
+.title {
+  font-size: 2.5rem;
+  color: #ffd700;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #ffffff;
+  margin-bottom: 2rem;
+}
+
+.loginButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 1rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.googleButton {
+  background-color: #4285F4;
+  color: white;
+}
+
+.googleButton:hover {
+  background-color: #357ae8;
+}
+
+.facebookButton {
+  background-color: #1877F2;
+  color: white;
+}
+
+.facebookButton:hover {
+  background-color: #166fe5;
+}
+
+.loginIcon {
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
+}
+
+.orDivider {
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+  margin: 1rem 0;
+}
+
+.orDivider::before,
+.orDivider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #ffffff;
+}
+
+.orDivider::before {
+  margin-right: .5em;
+}
+
+.orDivider::after {
+  margin-left: .5em;
+}
+
+.emailInput,
+.passwordInput {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.emailInput::placeholder,
+.passwordInput::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.loginWithEmailButton {
+  background-color: #ffd700;
+  color: #1a1a1a;
+  font-weight: bold;
+}
+
+.loginWithEmailButton:hover {
+  background-color: #ffea00;
+}
+
+.greeting {
+  color: gold;
+  background-color: darkred;
+  padding: 10px;
+  border-radius: 5px;
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.errorMessage {
+  color: red;
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.message {
+  color: #357ae8;
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 20px;
+}
