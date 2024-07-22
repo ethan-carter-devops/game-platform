@@ -14,7 +14,13 @@ function Greeting({ userName }) {
     </>
   );
 }
-
+const AccountBalance = ({ accountBalance }) => {
+  return (
+    <div className={styles.accountBalance}>
+      <p>Account Balance: ${JSON.stringify(accountBalance)}</p>
+    </div>
+  );
+};
 const api = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL,
   headers: {
@@ -26,12 +32,18 @@ const App = () => {
   const [userName, setUserName] = useState("");
   const [error, setError] = useState(""); // New state for handling errors
   const [message, setMessage] = useState(""); // New state for handling errors
+  const [appSession, setAppSession] = useState(null); // New state for handling errors
+  const [accountBalance, setAccountBalance] = useState(null); // New state for handling errors
 
   const onGoogleSuccess = async (credentialResponse) => {
+    let sessionToken;
     try {
-      const response = await sendAPIsignin(credentialResponse);
-      console.log("Login Success:", response.data);
-      setMessage(response.data.message);
+      const {
+        data: { message, user, session },
+      } = await sendAPIsignin(credentialResponse);
+      console.log("Login Success:", user);
+      setMessage(message);
+      sessionToken = session;
     } catch (error) {
       const {
         data: { session, user },
@@ -40,7 +52,7 @@ const App = () => {
         provider: "google",
         token: credentialResponse.credential,
       });
-      console.log(session);
+      sessionToken = session;
       if (errorSupabase) {
         setError("Please remove browser ad blockers and try again."); // Update error message
         console.debug("Login Failed:", errorSupabase);
@@ -48,8 +60,23 @@ const App = () => {
       }
       setMessage(`User logged successfully as ${user.email}`);
     }
+    setAppSession(sessionToken);
+    getBalance(sessionToken);
   };
-  async function sendAPIsignin(credentialResponse) {
+  const getBalance = async (session) => {
+    try {
+      const response = await api.get("/account", {
+        headers: {
+          Authorization: "Bearer " + session.access_token,
+        },
+      });
+      setAccountBalance(response.data);
+    } catch (error) {
+      console.debug("getBalance Failed:", error);
+      throw new Error(error);
+    }
+  };
+  const sendAPIsignin = async (credentialResponse) => {
     const credentialResponseDecoded = jwtDecode(credentialResponse.credential);
     const {
       email,
@@ -73,7 +100,7 @@ const App = () => {
         },
       }
     );
-  }
+  };
   const onGoogleError = () => {
     console.log("Login Failed");
     setError("Authentication failed. Please try again."); // Handle other authentication errors
@@ -98,6 +125,7 @@ const App = () => {
         {error && <p className={styles.errorMessage}>{error}</p>}
         {message && <p className={styles.message}>{message}</p>}
         <Greeting userName={userName} />
+        {accountBalance && <AccountBalance accountBalance={accountBalance} />}
       </div>
     </div>
   );
