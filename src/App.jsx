@@ -34,12 +34,13 @@ const App = () => {
       setMessage(response.data.message);
     } catch (error) {
       const {
-        data: { user },
+        data: { session, user },
         error: errorSupabase,
       } = await supabase.auth.signInWithIdToken({
         provider: "google",
         token: credentialResponse.credential,
       });
+      console.log(session);
       if (errorSupabase) {
         setError("Please remove browser ad blockers and try again."); // Update error message
         console.debug("Login Failed:", errorSupabase);
