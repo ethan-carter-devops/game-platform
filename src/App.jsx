@@ -4,23 +4,16 @@ import { jwtDecode } from "jwt-decode";
 import styles from "./App.module.css";
 import api, { removeToken, getStoredToken, storeToken } from "./api";
 
-function Greeting({ userName }) {
-  return (
-    <>
-      {userName === "" ? null : (
-        <p className={styles.greeting}>Greetings, {userName}!</p>
-      )}
-    </>
-  );
-}
-
-const AccountBalance = ({ accountBalance }) => {
-  return (
-    <div className={styles.accountBalance}>
-      <p>Account Balance: ${JSON.stringify(accountBalance)}</p>
-    </div>
-  );
+const Greeting = ({ userName }) => {
+  if (!userName) return null;
+  return <p className={styles.greeting}>Greetings, {userName}!</p>;
 };
+
+const AccountBalance = ({ accountBalance }) => (
+  <div className={styles.accountBalance}>
+    <p>Account Balance: ${JSON.stringify(accountBalance)}</p>
+  </div>
+);
 
 const App = () => {
   const [userName, setUserName] = useState("");
@@ -32,7 +25,6 @@ const App = () => {
   useEffect(() => {
     const initializeApp = async () => {
       const storedToken = getStoredToken();
-
       if (storedToken) {
         try {
           const userData = jwtDecode(storedToken.access_token);
@@ -83,22 +75,16 @@ const App = () => {
   const getBalance = async (session) => {
     try {
       const response = await api.get("/account", {
-        headers: {
-          Authorization: "Bearer " + session.access_token,
-        },
+        headers: { Authorization: `Bearer ${session.access_token}` },
       });
       setAccountBalance(response.data);
     } catch (error) {
       console.debug("getBalance Failed:", error);
-      if (error.response && error.response.status === 401) {
-        // Token might be expired, try to refresh
+      if (error.response?.status === 401) {
         try {
           const newSession = await refreshToken(session);
-          // Retry getting balance with new token
           const retryResponse = await api.get("/account", {
-            headers: {
-              Authorization: "Bearer " + newSession.access_token,
-            },
+            headers: { Authorization: `Bearer ${newSession.access_token}` },
           });
           setAccountBalance(retryResponse.data);
         } catch (refreshError) {
@@ -106,22 +92,21 @@ const App = () => {
             "Failed to refresh token and get balance:",
             refreshError
           );
-          throw new Error(refreshError);
+          throw refreshError;
         }
       } else {
-        throw new Error(error);
+        throw error;
       }
     }
   };
 
   const sendAPIsignin = async (credentialResponse) => {
-    const credentialResponseDecoded = jwtDecode(credentialResponse.credential);
     const {
       email,
       family_name: lastName,
       given_name: firstName,
-    } = credentialResponseDecoded;
-    return await api.post(
+    } = jwtDecode(credentialResponse.credential);
+    return api.post(
       "/auth",
       {
         credential: credentialResponse.credential,
@@ -130,11 +115,7 @@ const App = () => {
         firstName,
         auth: "google",
       },
-      {
-        headers: {
-          Authorization: credentialResponse.credential,
-        },
-      }
+      { headers: { Authorization: credentialResponse.credential } }
     );
   };
 
