@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter as Router } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import styles from "./App.module.css";
@@ -159,7 +155,7 @@ const LoginApp = ({
   }
 
   return (
-    <Router basename={basename}>
+    <Router>
       <div className={styles.container}>
         <Routes>
           <Route
