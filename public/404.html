@@ -2,12 +2,22 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="refresh" content="0; url=/" />
-    <script>
-      // Handle redirect for GitHub Pages
-      var path = window.location.pathname;
-      window.location.href = window.location.origin + "/game-platform" + path;
+    <title>Page Not Found</title>
+    <script type="text/javascript">
+      // Get the pathname and check if it's not the root or already the base path
+      var pathname = window.location.pathname;
+
+      // Ensure we're not redirecting from the 404 page itself to avoid a loop
+      if (!pathname.includes("/game-platform/")) {
+        // Construct the new URL with the correct base path
+        var newUrl = window.location.origin + "/game-platform" + pathname;
+
+        // Redirect to the corrected URL
+        window.location.replace(newUrl);
+      }
     </script>
   </head>
-  <body></body>
+  <body>
+    <h1>404 - Page Not Found</h1>
+  </body>
 </html>
