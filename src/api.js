@@ -5,69 +5,48 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true, // Ensure cookies are sent with requests
 });
 
-// Function to get the stored token
-export const getStoredToken = () => {
-  const token = localStorage.getItem("accessToken");
-  return token ? JSON.parse(token) : null;
-};
+// No need for token storage functions as we use cookies now
 
-// Function to store the token
-export const storeToken = (token) => {
-  localStorage.setItem("accessToken", JSON.stringify(token));
-};
-
-// Function to remove the token
-export const removeToken = () => {
-  localStorage.removeItem("accessToken");
-};
-
-// Add a request interceptor
+// Simplified request interceptor (if needed for other headers)
+// Function to get the token from the cookie
+// Request interceptor to add the token to the Authorization header
 api.interceptors.request.use(
   (config) => {
-    const token = getStoredToken();
-    if (token) {
-      config.headers["Authorization"] = `Bearer ${token.access_token}`;
-    }
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-// Add a response interceptor
+// Response interceptor for handling 401 errors
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    // If the error status is 401 and there is no originalRequest._retry flag,
-    // it means the token has expired and we need to refresh it
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      !originalRequest._retry
+    ) {
       originalRequest._retry = true;
 
       try {
-        const token = getStoredToken();
-        const response = await axios.post(
+        // Attempt to refresh the session by calling the refresh endpoint
+        await axios.post(
           `${import.meta.env.VITE_BACKEND_URL}/auth/refresh`,
-          {
-            refresh_token: token.refresh_token,
-          }
+          null,
+          { withCredentials: true }
         );
 
-        const { access_token, refresh_token } = response.data;
-        storeToken({ access_token, refresh_token });
-
-        // Retry the original request with the new token
-        originalRequest.headers["Authorization"] = `Bearer ${access_token}`;
+        // Retry the original request after successful refresh
         return api(originalRequest);
-      } catch (error) {
-        // If refresh token fails, log out the user
-        removeToken();
-        // Redirect to login page or show login modal
-        // You might want to use your app's routing mechanism here
-        window.location.href = "/login";
-        return Promise.reject(error);
+      } catch (refreshError) {
+        // If the refresh fails, redirect to login or handle the error accordingly
+        // Clear any session state (if needed) and redirect to login
+        return Promise.reject(refreshError);
       }
     }
 
