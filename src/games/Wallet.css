@@ -1,0 +1,93 @@
+.wallet-container {
+  background-color: #4a0e4e;
+  color: white;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+.wallet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.wallet-header h1 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.total-balance {
+  text-align: right;
+}
+
+.total-balance p {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 5px 0 0;
+}
+
+.wallet-content h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.balance-details {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.balance-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.sub-item {
+  padding-left: 20px;
+  font-size: 0.9em;
+  color: #ccc;
+}
+
+.deposit-button, .withdraw-button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.deposit-button {
+  background-color: #ffa500;
+  color: black;
+}
+
+.withdraw-button {
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.8em;
+}
+
+.action-item svg {
+  margin-bottom: 5px;
+}

@@ -1,0 +1,12 @@
+@keyframes slot-spin {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-100%);
+    }
+  }
+  
+  .animate-slot-spin {
+    animation: slot-spin 3s linear infinite;
+  }
