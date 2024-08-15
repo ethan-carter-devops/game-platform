@@ -5,6 +5,7 @@ import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import styles from "./App.module.css";
 import api from "./api";
+import Home from "./components/Home";
 
 // Constants for paths
 const BASENAME = "/game-platform/";
@@ -12,28 +13,6 @@ const LOGIN_PATH = "/login";
 const HOME_PATH = "/home";
 const ROOT_PATH = "/";
 const WILDCARD_PATH = "*";
-
-const Greeting = ({ userName }) => {
-  if (!userName) return null;
-  return <p className={styles.greeting}>Greetings, {userName}!</p>;
-};
-
-const AccountBalance = ({ accountBalance }) => (
-  <div className={styles.accountBalance}>
-    <p>Account Balance: ${JSON.stringify(accountBalance)}</p>
-  </div>
-);
-
-const Home = ({ userName, accountBalance, logout }) => (
-  <div className={styles.container}>
-    <h2>Welcome to the Games Platform</h2>
-    <Greeting userName={userName} />
-    {accountBalance && <AccountBalance accountBalance={accountBalance} />}
-    <button onClick={logout} className={styles.logoutButton}>
-      Logout
-    </button>
-  </div>
-);
 
 const Login = ({ onGoogleSuccess, onGoogleError }) => (
   <div className={styles.loginCard}>
